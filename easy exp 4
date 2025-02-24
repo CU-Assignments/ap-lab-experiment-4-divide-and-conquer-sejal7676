@@ -1,0 +1,47 @@
+#include <iostream>
+#include <unordered_set>
+#include <string>
+using namespace std;
+
+bool isNiceSubstring(const string& s) {
+    unordered_set<char> charSet;
+    for (char c : s) {
+        charSet.insert(c);
+    }
+    for (char c : s) {
+        if (charSet.find(tolower(c)) == charSet.end() || charSet.find(toupper(c)) == charSet.end()) {
+            return false;  // If lowercase or uppercase of 'c' is missing
+        }
+    }
+    return true;
+}
+
+string longestNiceSubstring(const string& s) {
+    int n = s.length();
+    string longestSubstring = "";
+    
+    for (int i = 0; i < n; ++i) {
+        for (int j = i + 1; j <= n; ++j) {
+            string substr = s.substr(i, j - i);
+            if (isNiceSubstring(substr) && substr.length() > longestSubstring.length()) {
+                longestSubstring = substr;
+            }
+        }
+    }
+    return longestSubstring;
+}
+
+int main() {
+    string s;
+    cout << "Enter a string: ";
+    cin >> s;
+    
+    string result = longestNiceSubstring(s);
+    if (result.empty()) {
+        cout << "No nice substring found" << endl;
+    } else {
+        cout << "Longest nice substring: " << result << endl;
+    }
+
+    return 0;
+}
